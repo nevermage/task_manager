@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\Board\BoardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Ticket\CreateController;
+use App\Http\Controllers\Ticket\IndexController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,66 +21,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/board', function () {
-    $ticketPriorities = [
-        'Minor',
-        'Major',
-        'Trivial',
-        'Blocker',
-    ];
+Route::get('/board', [BoardController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('board');
 
-    $boardColumns = [
-        'Ready for development' => [],
-        'In process' => [],
-        'Ready for testing' => [],
-        'Testing' => [],
-        'Done' => [],
-    ];
+Route::get('/ticket/new', [CreateController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('createTicket');
 
-    $data = array_map(function () use ($ticketPriorities) {
-        $ticketData = [];
+Route::post('/ticket/create', [CreateController::class, 'create'])
+    ->middleware(['auth', 'verified']);
 
-        for ($i = 0; $i < rand(1,5); $i++) {
-            $ticketData[] = [
-                'title' => 'Ticket title some title text about the ticket',
-                'number' => 'MG-' . rand(1, 50),
-                'priority' => $ticketPriorities[array_rand($ticketPriorities)],
-            ];;
-        }
-
-        return $ticketData;
-    }, $boardColumns);
-
-    return view('board', ['columns' => $data]);
-})->middleware(['auth', 'verified'])->name('board');
-
-Route::get('/ticket/new', function () {
-    return view('createTicket');
-})->middleware(['auth', 'verified'])->name('createTicket');
-
-Route::get('/token', function () {
-    return csrf_token();
-});
-
-Route::post('/ticket/create', function () {
-    return ['data' => ['number' => 'MG-12']];
-})->middleware(['auth', 'verified']);
-
-Route::get('/ticket/{number}', function ($number) {
-    $data = [
-        'number' => $number,
-        'title' => "Some very long ticket title that contains some sense",
-        'priority' => 'Minor',
-        'description' => 'Description',
-        'version' => '1.1',
-        'estimationTime' => '30',
-        'timeSpent' => 3,
-        'created' => '2024-02-29 15:33:49',
-        'updated' => '2024-02-29 16:13:35',
-    ];
-
-    return view('ticket', $data);
-})->middleware(['auth', 'verified'])->name('ticket');
+Route::get('/ticket/{number}', [IndexController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('ticket');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
