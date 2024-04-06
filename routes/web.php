@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/board', function () {
     $ticketPriorities = [
         'Minor',
         'Major',
@@ -44,7 +49,19 @@ Route::get('/', function () {
     }, $boardColumns);
 
     return view('board', ['columns' => $data]);
+})->middleware(['auth', 'verified'])->name('board');
+
+Route::get('/ticket/new', function () {
+    return view('createTicket');
+})->middleware(['auth', 'verified'])->name('createTicket');
+
+Route::get('/token', function () {
+    return csrf_token();
 });
+
+Route::post('/ticket/create', function () {
+    return ['data' => ['number' => 'MG-12']];
+})->middleware(['auth', 'verified']);
 
 Route::get('/ticket/{number}', function ($number) {
     $data = [
@@ -60,7 +77,12 @@ Route::get('/ticket/{number}', function ($number) {
     ];
 
     return view('ticket', $data);
+})->middleware(['auth', 'verified'])->name('ticket');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('login', function () { return view('login'); });
-Route::get('register', function () { return view('register'); });
+require __DIR__.'/auth.php';

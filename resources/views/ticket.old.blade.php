@@ -1,6 +1,8 @@
+@extends('main');
+
 @section('title', $number)
 
-<x-app-layout>
+@section('content')
     <div class="ticket-container">
         <div>Number: {{ $number }}</div>
         <div>Title: {{ $title }}</div>
@@ -12,4 +14,4 @@
         <div>Created: {{ $created }}</div>
         <div>Updated: {{ $updated }}</div>
     </div>
-</x-app-layout>
+@endsection

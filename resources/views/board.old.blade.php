@@ -1,6 +1,8 @@
+@extends('main');
+
 @section('title', 'Board')
 
-<x-app-layout>
+@section('content')
     <div class="board-container">
         @foreach($columns as $columnTitle => $tickets)
             <div class="column">
@@ -21,4 +23,4 @@
             </div>
         @endforeach
     </div>
-</x-app-layout>
+@endsection

@@ -1,3 +1,6 @@
 import './bootstrap';
+import Alpine from 'alpinejs';
 
-console.log('zxc');
+window.Alpine = Alpine;
+
+Alpine.start();
