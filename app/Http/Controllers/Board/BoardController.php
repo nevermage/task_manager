@@ -3,39 +3,21 @@
 namespace App\Http\Controllers\Board;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ticket;
 
 class BoardController extends Controller
 {
     public function index()
     {
-        $ticketPriorities = [
-            'Minor',
-            'Major',
-            'Trivial',
-            'Blocker',
-        ];
+        $data = [];
 
-        $boardColumns = [
-            'Ready for development' => [],
-            'In process' => [],
-            'Ready for testing' => [],
-            'Testing' => [],
-            'Done' => [],
-        ];
-
-        $data = array_map(function () use ($ticketPriorities) {
-            $ticketData = [];
-
-            for ($i = 0; $i < rand(1,5); $i++) {
-                $ticketData[] = [
-                    'title' => 'Ticket title some title text about the ticket',
-                    'number' => 'MG-' . rand(1, 50),
-                    'priority' => $ticketPriorities[array_rand($ticketPriorities)],
-                ];;
-            }
-
-            return $ticketData;
-        }, $boardColumns);
+        foreach (Ticket::all() as $ticket) {
+            $data[Ticket::STATUSES[$ticket->status]][] = [
+                'title' => $ticket->title,
+                'number' => 'AQ-' . $ticket->id,
+                'priority' => $ticket->priority,
+            ];
+        }
 
         return view('board', ['columns' => $data]);
     }

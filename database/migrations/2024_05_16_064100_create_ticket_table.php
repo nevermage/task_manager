@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('ticket', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('project_id');
-            $table->integer('number');
+//            $table->integer('number');
             $table->string('title');
             $table->text('description');
+            $table->unsignedBigInteger('status')->default(1);
             $table->unsignedBigInteger('assigned_user_id')->nullable();
             $table->unsignedBigInteger('priority_id')->nullable();
             $table->unsignedBigInteger('version_id')->nullable();
@@ -27,7 +28,7 @@ return new class extends Migration
             $table->foreign('priority_id')->references('id')->on('priority');
             $table->foreign('version_id')->references('id')->on('version');
 
-            $table->index(['number', 'project_id']);
+//            $table->index(['number', 'project_id']);
         });
     }
 

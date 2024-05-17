@@ -3,21 +3,30 @@
 namespace App\Http\Controllers\Ticket;
 
 use App\Http\Controllers\Controller;
+use App\Models\Priority;
+use App\Models\Ticket;
 
 class IndexController extends Controller
 {
     public function index($number)
     {
+        $ticket = Ticket::getByNumber($number);
+
+        if (!$ticket) {
+            throw new \InvalidArgumentException('Ticket not found');
+        }
+
         $data = [
             'number' => $number,
-            'title' => "Some very long ticket title that contains some sense",
-            'priority' => 'Minor',
-            'description' => 'Description',
-            'version' => '1.1',
-            'estimationTime' => '30',
-            'timeSpent' => 3,
-            'created' => '2024-02-29 15:33:49',
-            'updated' => '2024-02-29 16:13:35',
+            'title' => $ticket->title,
+            'priority' => $ticket->priority_id,
+            'status' => Ticket::STATUSES[$ticket->status],
+            'assigned_user_id' => $ticket->assigned_user_id ?? 1,
+            'description' => $ticket->description,
+            'version' => $ticket->version_id ?? 0.1,
+            'created' => $ticket->created_at,
+            'updated' => $ticket->updated_at,
+            'priorities' => Priority::getAsKeyValueArray()
         ];
 
         return view('ticket', $data);

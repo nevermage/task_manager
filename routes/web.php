@@ -1,9 +1,6 @@
 <?php
 
-use App\Http\Controllers\Board\BoardController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Ticket\CreateController;
-use App\Http\Controllers\Ticket\IndexController;
+use App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,22 +18,29 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/board', [BoardController::class, 'index'])
+Route::get('/board', [Controllers\Board\BoardController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('board');
 
-Route::get('/ticket/new', [CreateController::class, 'index'])
-    ->middleware(['auth', 'verified'])->name('createTicket');
+Route::get('/ticket/new', [Controllers\Ticket\CreateController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('newTicket');
 
-Route::post('/ticket/create', [CreateController::class, 'create'])
+Route::post('/ticket/create', [Controllers\Ticket\CreateController::class, 'create'])
     ->middleware(['auth', 'verified']);
 
-Route::get('/ticket/{number}', [IndexController::class, 'index'])
+Route::get('/ticket/{number}/edit', [Controllers\Ticket\EditController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('editTicket');
+Route::patch('/ticket/save', [Controllers\Ticket\EditController::class, 'save'])
+    ->middleware(['auth', 'verified']);
+
+Route::get('/ticket/{number}', [Controllers\Ticket\IndexController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('ticket');
 
+Route::get('/project/create', [Controllers\Project\CreateController::class, 'create']);
+
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';
