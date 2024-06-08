@@ -10,7 +10,9 @@
                 <div class="column-content">
                     @foreach($tickets as $ticket)
                         <div class="ticket">
-                            <div class="ticket-importance">{{ $ticket['priority'] }}</div>
+                            <div class="ticket-importance" style="color: {{ \App\Models\Priority::getColorByPriority($ticket['priorityId']) }}">
+                                {{ \App\Models\Priority::getAsKeyValueArray()[$ticket['priorityId']] }}
+                            </div>
                             <div class="ticket-number">
                                 <a href="/ticket/{{ $ticket['number'] }}">{{ $ticket['number'] }}</a>
                             </div>

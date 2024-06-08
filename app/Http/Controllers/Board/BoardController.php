@@ -15,7 +15,7 @@ class BoardController extends Controller
             $data[Ticket::STATUSES[$ticket->status]][] = [
                 'title' => $ticket->title,
                 'number' => 'AQ-' . $ticket->id,
-                'priority' => $ticket->priority,
+                'priorityId' => $ticket->priority_id,
             ];
         }
 
