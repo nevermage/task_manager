@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ticket;
 use App\Http\Controllers\Controller;
 use App\Models\Priority;
 use App\Models\Ticket;
+use App\Models\User;
 
 class IndexController extends Controller
 {
@@ -21,7 +22,8 @@ class IndexController extends Controller
             'title' => $ticket->title,
             'priority' => $ticket->priority_id,
             'status' => Ticket::STATUSES[$ticket->status],
-            'assigned_user_id' => $ticket->assigned_user_id ?? 1,
+            'assignedUserId' => $ticket->assigned_user_id ?? 1,
+            'assignedUserName' => $ticket->assigned_user_id ? User::find($ticket->assigned_user_id)->name : null,
             'description' => $ticket->description,
             'version' => $ticket->version_id ?? 0.1,
             'created' => $ticket->created_at,
