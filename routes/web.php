@@ -15,7 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if (!auth()->user()) {
+        return redirect('/login');
+    }
+
+    return redirect('/board');
 });
 
 Route::get('/board', [Controllers\Board\BoardController::class, 'index'])
