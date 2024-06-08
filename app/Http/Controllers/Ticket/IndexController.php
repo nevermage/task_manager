@@ -20,7 +20,7 @@ class IndexController extends Controller
         $data = [
             'number' => $number,
             'title' => $ticket->title,
-            'priority' => $ticket->priority_id,
+            'priorityId' => $ticket->priority_id,
             'status' => Ticket::STATUSES[$ticket->status],
             'assignedUserId' => $ticket->assigned_user_id ?? 1,
             'assignedUserName' => $ticket->assigned_user_id ? User::find($ticket->assigned_user_id)->name : null,

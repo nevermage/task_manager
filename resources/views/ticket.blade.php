@@ -14,7 +14,9 @@
                 </div>
                 <div class="ticket-item left">
                     <span class="parameter">Priority:</span>
-                    <span class="value">High</span>
+                    <span class="value" style="color: {{\App\Models\Priority::getColorByPriority($priorityId)}}">
+                        {{\App\Models\Priority::getAsKeyValueArray()[$priorityId]}}
+                    </span>
                 </div>
                 <div class="ticket-item left">
                     <span class="parameter">Description:</span>
